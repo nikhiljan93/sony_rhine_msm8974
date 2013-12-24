@@ -1,0 +1,21 @@
+
+CUR_TC=/home/nik/android/test/AK-linaro/4.7.3-2013.04.20130415/bin/
+
+
+### compile kernel
+ARCH=arm CROSS_COMPILE=${CUR_TC}arm-linux-gnueabihf- make mod_rhine_defconfig
+ARCH=arm CROSS_COMPILE=${CUR_TC}arm-linux-gnueabihf- make xconfig
+cp ./.config arch/arm/configs/mod_rhine_defconfig
+ARCH=arm CROSS_COMPILE=${CUR_TC}arm-linux-gnueabihf- make CONFIG_DEBUG_SECTION_MISMATCH=y -j8
+
+echo "checking for compiled kernel..."
+if [ -f arch/arm/boot/zImage ]
+then
+
+### copy zImage
+cp arch/arm/boot/zImage ../build/msm8974_rhine/
+
+cd ../build/msm8974_rhine/
+
+/home/nik/android/z1/build/msm8974_rhine/generate_dt.sh
+fi
