@@ -31,6 +31,10 @@
 #include <linux/of_gpio.h>
 #include "synaptics_i2c_rmi4.h"
 #include <linux/input/mt.h>
+#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+#include <linux/input/sweep2wake.h>
+#include <linux/input/doubletap2wake.h>
+#endif
 
 #define DRIVER_NAME "synaptics_rmi4_i2c"
 #define INPUT_PHYS_NAME "synaptics_rmi4_i2c/input0"
@@ -3379,6 +3383,13 @@ static int synaptics_rmi4_suspend(struct device *dev)
 {
 	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(dev);
 	int retval;
+	
+	#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+   	if ((s2w_switch > 0) || (dt2w_switch > 0)) {
+    	pr_info("suspend avoided!\n");
+     	return 0;
+   	} else {
+ 	#endif
 
 	if (rmi4_data->stay_awake) {
 		rmi4_data->staying_awake = true;
@@ -3420,6 +3431,9 @@ static int synaptics_rmi4_suspend(struct device *dev)
 		}
 	}
 	rmi4_data->suspended = true;
+	#ifdef CONFIG_TOUCHSCREEN_PREVENT_SLEEP
+   	}
+ 	#endif
 
 	return 0;
 }
