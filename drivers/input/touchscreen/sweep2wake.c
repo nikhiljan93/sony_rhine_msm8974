@@ -57,7 +57,8 @@ MODULE_LICENSE("GPLv2");
 #define S2W_S2SONLY_DEFAULT	0
 #define S2W_PWRKEY_DUR          60
 
-#ifdef (CONFIG_MACH_MSM8974_HAMMERHEAD || CONFIG_MACH_SONY_HONAMI_ROW)
+#if defined(CONFIG_MACH_MSM8974_HAMMERHEAD) || defined(CONFIG_MACH_SONY_HONAMI_ROW)
+
 /* Hammerhead aka Nexus 5 or Honami aka Xperia Z1 */
 #define DEFAULT_S2W_Y_MAX               1920
 #define DEFAULT_S2W_X_MAX               1080
